@@ -1,4 +1,4 @@
-function sum(a, b) {
+// sum
+module.exports = (a, b) => {
     return a + b;
-}
-module.exports = sum;
+};
