@@ -7,3 +7,11 @@ services:
     volumes:
       # for dev
       - ./simple:/app
+  vue:
+    build:
+      context: ./vue
+      dockerfile: ./Dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./vue:/app
