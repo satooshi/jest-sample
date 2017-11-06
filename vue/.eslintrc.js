@@ -24,5 +24,21 @@ module.exports = {
     // allow debugger during development
     'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0,
     "no-unused-vars": 0
+  },
+  globals: {
+    "jest": true,
+    "expect": true,
+    "mockFn": true,
+    "config": true,
+    "afterEach": true,
+    "beforeEach": true,
+    "describe": true,
+    "it": true,
+    "runs": true,
+    "waitsFor": true,
+    "pit": true,
+    "require": true,
+    "xdescribe": true,
+    "xit": true
   }
 }
