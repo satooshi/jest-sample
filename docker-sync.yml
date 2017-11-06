@@ -1,0 +1,7 @@
+version: '2'
+syncs:
+  jest-sample-sync-simple-volume:
+    src: './simple'
+  jest-sample-sync-vue-volume:
+    src: './vue'
+

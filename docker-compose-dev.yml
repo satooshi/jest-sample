@@ -1,0 +1,16 @@
+version: "2"
+
+volumes:
+  jest-sample-sync-simple-volume:
+    external: true
+  jest-sample-sync-vue-volume:
+    external: true
+
+services:
+  simple:
+    volumes:
+      - jest-sample-sync-simple-volume:/app:nocopy
+  vue:
+    volumes:
+      - jest-sample-sync-vue-volume:/app:nocopy
+
