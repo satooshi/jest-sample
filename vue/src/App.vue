@@ -1,6 +1,22 @@
 <template>
   <div id="app">
-    <router-view/>
+    <header>
+      <h1>
+        Vue ToDo
+      </h1>
+    </header>
+
+    <div class="container">
+      <div class="row justify-content-md-center">
+        <div class="col-6">
+          <router-view/>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      Copyright @satooshi
+    </footer>
   </div>
 </template>
 
