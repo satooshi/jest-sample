@@ -1,18 +1,18 @@
 <template>
-  <form>
-    <div class="form-group">
-      <div class="input-group">
-        <input type="text" class="form-control" placeholder="ToDo..." v-model="todo">
-        <span class="input-group-btn">
-          <button class="btn btn-primary" @click.prevent="addTodo">add</button>
-        </span>
+  <div>
+    <form novalidate @submit.prevent="addTodo" v-bind:class="classObjectForm">
+      <div class="row">
+        <input type="text" class="form-control" placeholder="ToDo..." required v-model="todo">
+        <div class="invalid-feedback">
+          Please enter your ToDo.
+        </div>
       </div>
+    </form>
 
-      <div>
-        <!-- list here -->
-      </div>
+    <div>
+      <!-- list here -->
     </div>
-  </form>
+  </div>
 </template>
 
 <script>
@@ -20,13 +20,25 @@
     name: 'todo',
     data () {
       return {
-        todo: ''
+        //TODO should move to TodoForm.vue ?
+        classObjectForm: {
+          'container': true,
+          'was-validated': false
+        },
+        todo: '',
+        todos: []
       }
     },
     methods: {
+      isValid() {
+        this.classObjectForm['was-validated'] = true
+        return !!this.todo
+      },
       addTodo() {
-        if (this.todo) {
+        if (this.isValid()) {
+          this.todos.push({todo: this.todo, done: false})
           this.todo = ''
+          this.classObjectForm['was-validated'] = false
         }
       }
     }
