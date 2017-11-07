@@ -2,9 +2,9 @@
   <form>
     <div class="form-group">
       <div class="input-group">
-        <input type="text" class="form-control" placeholder="ToDo...">
+        <input type="text" class="form-control" placeholder="ToDo..." v-model="todo">
         <span class="input-group-btn">
-          <button class="btn btn-primary">add</button>
+          <button class="btn btn-primary" @click.prevent="addTodo">add</button>
         </span>
       </div>
 
@@ -17,7 +17,19 @@
 
 <script>
   export default {
-    name: 'todo'
+    name: 'todo',
+    data () {
+      return {
+        todo: ''
+      }
+    },
+    methods: {
+      addTodo() {
+        if (this.todo) {
+          this.todo = ''
+        }
+      }
+    }
   }
 </script>
 
