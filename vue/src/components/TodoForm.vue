@@ -49,4 +49,7 @@
 </script>
 
 <style>
+  form {
+    padding-bottom: 20px;
+  }
 </style>
