@@ -13,7 +13,7 @@ alias ddcr='ddc run --rm'
 ### How to execute tests by jest
 
 ```
-# execute without change files
+# execute without changing files
 $ dcr simple yarn test
 $ dcr vue yarn test
 
