@@ -16,7 +16,7 @@
     computed: {
       inputText: {
         get() {
-          return this.store.todoInput.todo
+          return this.store.state.todoInput.todo
         },
         set(newValue) {
           this.$emit('input', newValue)

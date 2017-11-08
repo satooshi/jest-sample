@@ -16,8 +16,8 @@
     state: {
       todoInput: {todo: '', done: false},
       todos: [
-        {todo: "hoge", done: true},
-        {todo: "foo", done: false}
+        {todo: "foo", done: true},
+        {todo: "bar", done: false}
       ]
     }
   })

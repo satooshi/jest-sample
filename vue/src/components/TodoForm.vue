@@ -1,6 +1,6 @@
 <template>
     <form novalidate @submit.prevent="submit" class="container" :class="classObjectForm">
-      <todo-input @input="onInput" :store="this.store.state"></todo-input>
+      <todo-input @input="onInputTodo" :store="this.store"></todo-input>
     </form>
 </template>
 
@@ -41,7 +41,7 @@
           this.$emit('submit', newTodo)
         }
       },
-      onInput(newValue) {
+      onInputTodo(newValue) {
         this.store.state.todoInput.todo = newValue
       }
     }
