@@ -7,8 +7,8 @@
 
 <script>
   import { mapActions } from 'vuex'
-  import TodoForm from "./TodoForm.vue";
-  import TodoList from "./TodoList.vue";
+  import TodoForm from './TodoForm.vue';
+  import TodoList from './TodoList.vue';
 
   export default {
     name: 'TodoView',

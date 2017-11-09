@@ -5,7 +5,7 @@
 </template>
 
 <script>
-  import TodoInput from "./TodoInput.vue";
+  import TodoInput from './TodoInput.vue';
 
   export default {
     name: 'TodoForm',
