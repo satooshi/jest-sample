@@ -5,6 +5,8 @@ volumes:
     external: true
   jest-sample-sync-vue-volume:
     external: true
+  jest-sample-sync-rails-volume:
+    external: true
 
 services:
   simple:
@@ -13,4 +15,7 @@ services:
   vue:
     volumes:
       - jest-sample-sync-vue-volume:/app:nocopy
+  rails:
+    volumes:
+      - jest-sample-sync-rails-volume:/app:nocopy
 

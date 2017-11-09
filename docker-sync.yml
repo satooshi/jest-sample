@@ -4,4 +4,5 @@ syncs:
     src: './simple'
   jest-sample-sync-vue-volume:
     src: './vue'
-
+  jest-sample-sync-rails-volume:
+    src: './rails'
