@@ -10,20 +10,30 @@
 <script>
   export default {
     name: 'TodoInput',
+    props: {
+      todo: {
+        todo: String,
+        done: Boolean,
+        edit: Boolean,
+      }
+    },
     methods: {
-      validate(newValue) {
-        return !!newValue
+      validate() {
+        const errors = {}
+        if (!this.todo.todo) {
+          errors.required = 'Please enter your ToDo.'
+        }
+
+        return errors
       }
     },
     computed: {
       inputText: {
         get() {
-          return this.$store.state.TodoInput.todo
+          return this.todo.todo
         },
         set(newValue) {
-          if (this.validate(newValue)) {
-            this.$store.commit('TodoInput/set', newValue)
-          }
+          this.$emit('input', {todo: newValue})
         }
       }
     }

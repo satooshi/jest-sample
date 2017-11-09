@@ -1,40 +1,41 @@
-import { shallow } from 'vue-test-utils'
+import { mount } from 'vue-test-utils'
 import TodoInput from '../TodoInput.vue'
 import store from '../../store'
 
 describe('TodoInput.vue', () => {
   let wrapper
-  let todoInput = store.state.TodoInput
 
   beforeEach(() => {
-    wrapper = shallow(TodoInput, {store})
-    store.commit('TodoInput/clear')
+    const props = {
+      todo: {
+        todo: '',
+        done: false,
+        edit: false,
+      }
+    }
+    wrapper = mount(TodoInput, {propsData: props, store})
+    expect(wrapper.vm.todo.todo).toBe('')
+    expect(wrapper.vm.inputText).toBe('')
   })
 
   it('gets input text', () => {
-    expect(todoInput.todo).toBe('')
-    expect(wrapper.vm.inputText).toBe('')
-
     const todo = 'foo'
-    todoInput.todo = todo
+    wrapper.vm.todo.todo = todo
 
-    expect(todoInput.todo).toBe(todo)
+    expect(wrapper.vm.todo.todo).toBe(todo)
     expect(wrapper.vm.inputText).toBe(todo)
   })
 
-  it('sets input text', () => {
-    expect(todoInput.todo).toBe('')
-    expect(wrapper.vm.inputText).toBe('')
+  it('emits input event when input text is set', () => {
+    expect(wrapper.emitted().input).toBeUndefined()
 
     const todo = 'foo'
-    wrapper.vm.inputText = todo
-
-    expect(todoInput.todo).toBe(todo)
-    expect(wrapper.vm.inputText).toBe(todo)
+    wrapper.vm.inputText = todo // emit 'input' event
+    expect(wrapper.emitted().input.length).toBe(1)
+    expect(wrapper.emitted().input[0]).toEqual([{todo: todo}])
 
     wrapper.vm.inputText = ''
-
-    expect(todoInput.todo).toBe(todo)
-    expect(wrapper.vm.inputText).toBe(todo)
+    expect(wrapper.emitted().input.length).toBe(2)
+    expect(wrapper.emitted().input[1]).toEqual([{todo: ''}])
   })
 })

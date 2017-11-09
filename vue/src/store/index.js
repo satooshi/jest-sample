@@ -3,46 +3,24 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
-const TodoInput = {
-  namespaced: true,
-  strict: true,
-  state: {todo: '', done: false},
-  getters: {
-    isValid (state) {
-      return !!state.todo
-    }
-  },
-  mutations: {
-    set(state, todo) {
-      state.todo = todo
-    },
-    clear(state) {
-      state.todo = ''
-      state.done = false
-    }
-  }
-}
-
 const Todos = {
   namespaced: true,
   state: [
-    {todo: "foo", done: true},
-    {todo: "bar", done: false}
+    {todo: "foo", done: true, edit: false},
+    {todo: "bar", done: false, edit: false}
   ],
   actions: {
-    add({ commit, rootState }) {
-      const newTodo = {
-        todo: rootState.TodoInput.todo,
-        done: false
-      }
-      commit('add', newTodo)
-      commit('TodoInput/clear', null, { root: true })
+    add({commit}, payload) {
+      commit('add', payload)
     },
     toggle({commit}, index) {
       commit('toggle', index)
     },
     remove({commit}, index) {
       commit('remove', index)
+    },
+    change({commit}, payload){
+      commit('change', payload)
     },
     clear({commit}) {
       commit('clear')
@@ -63,6 +41,17 @@ const Todos = {
         state.splice(index, 1)
       }
     },
+    change(state, payload) {
+      const index = payload.index
+      const props = payload.props
+
+      if (state[index]) {
+        const todo = state[index]
+        for (let name in props) {
+          todo[name] = props[name]
+        }
+      }
+    },
     clear(state) {
       const length = state.length
       for(let i = length - 1; i >= 0; i--) {
@@ -74,7 +63,6 @@ const Todos = {
 
 export default new Vuex.Store({
   modules: {
-    TodoInput,
     Todos
   }
 })

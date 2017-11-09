@@ -1,30 +1,38 @@
-import { shallow } from 'vue-test-utils'
+import { mount } from 'vue-test-utils'
 import TodoForm from '../TodoForm.vue'
 import store from '../../store'
 
 describe('TodoForm.vue', () => {
   let wrapper
-  let todoInput = store.state.TodoInput
 
   beforeEach(() => {
-    wrapper = shallow(TodoForm, {store})
-    store.commit('TodoInput/clear')
+    const props = {
+      todo: {
+        todo: '',
+        done: false,
+        edit: false,
+      }
+    }
+    wrapper = mount(TodoForm, {propsData: props, store})
+    expect(wrapper.vm.todo.todo).toBe('')
   })
 
   it('is valid', () => {
     expect(wrapper.vm.isValid()).toBeFalsy()
-    todoInput.todo = 'foo'
+    wrapper.vm.todo.todo = 'foo'
     expect(wrapper.vm.isValid()).toBeTruthy()
   })
 
-  it('submits form data if the form is valid', () => {
-    todoInput.todo = 'foo'
-    wrapper.vm.submit() // emit 'submit' event with new Todo model
-    expect(todoInput.todo).toBe('')
+  it('emits add event if the form is valid', () => {
+    expect(wrapper.emitted().add).toBeUndefined()
+
+    wrapper.vm.todo.todo = 'foo'
+    wrapper.vm.submit()
+    expect(wrapper.emitted().add.length).toBe(1)
   })
 
-  it('does not submit form data if the form is not valid', () => {
+  it('does not emit add event if the form is not valid', () => {
     wrapper.vm.submit()
-    expect(todoInput.todo).toBe('')
+    expect(wrapper.emitted().add).toBeUndefined()
   })
 })

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <todo-form></todo-form>
+    <todo-form :todo="todo" @add="onAddTodo"></todo-form>
     <todo-list></todo-list>
   </div>
 </template>
@@ -15,6 +15,24 @@
     components: {
       TodoForm,
       TodoList
+    },
+    data() {
+      return {
+        todo: {
+          todo: '',
+          done: false,
+          edit: false,
+        }
+      }
+    },
+    methods: {
+      onAddTodo() {
+        this.todo = {
+          todo: '',
+          done: false,
+          edit: false,
+        }
+      }
     }
   }
 </script>
