@@ -15,7 +15,7 @@
     </div>
 
     <footer>
-      Copyright @satooshi
+      Copyright <a href="https://github.com/satooshi/jest-sample" target="_blank">@satooshi</a>
     </footer>
   </div>
 </template>
