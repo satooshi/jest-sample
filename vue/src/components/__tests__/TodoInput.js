@@ -1,27 +1,14 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
 import { shallow } from 'vue-test-utils'
 import TodoInput from '../TodoInput.vue'
-
-Vue.use(Vuex)
+import store from '../../store'
 
 describe('TodoInput.vue', () => {
-  var wrapper
-  var todoInput
+  let wrapper
+  let todoInput = store.state.TodoInput
 
   beforeEach(() => {
-    const store = new Vuex.Store({
-      state: {
-        todoInput: {todo: '', done: false}
-      }
-    })
-
-    wrapper = shallow(TodoInput, {
-      propsData: { store: store }
-    })
-
-    const defaultData = wrapper.vm.store
-    todoInput = defaultData.state.todoInput
+    wrapper = shallow(TodoInput, {store})
+    store.commit('TodoInput/clear')
   })
 
   it('gets input text', () => {
@@ -36,15 +23,18 @@ describe('TodoInput.vue', () => {
   })
 
   it('sets input text', () => {
-    expect(wrapper.emitted().input).toBeFalsy()
+    expect(todoInput.todo).toBe('')
+    expect(wrapper.vm.inputText).toBe('')
 
     const todo = 'foo'
     wrapper.vm.inputText = todo
-    const event = wrapper.emitted().input
 
-    expect(event).toBeTruthy()
-    expect(event.length).toBe(1)
-    expect(event[0]).toEqual([todo])
+    expect(todoInput.todo).toBe(todo)
+    expect(wrapper.vm.inputText).toBe(todo)
+
+    wrapper.vm.inputText = ''
+
+    expect(todoInput.todo).toBe(todo)
+    expect(wrapper.vm.inputText).toBe(todo)
   })
 })
-

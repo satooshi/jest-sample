@@ -1,53 +1,30 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
 import { shallow } from 'vue-test-utils'
 import TodoList from '../TodoList.vue'
-
-Vue.use(Vuex)
+import store from '../../store'
 
 describe('TodoList.vue', () => {
-  var wrapper
-  var todos
+  let wrapper
+  let todos = store.state.Todos
 
   beforeEach(() => {
-    const store = new Vuex.Store({
-      state: {
-        todos: [
-          {todo: "foo", done: true},
-          {todo: "bar", done: false}
-        ]
-      }
-    })
+    wrapper = shallow(TodoList, {store})
+    store.commit('Todos/clear')
+    store.commit('Todos/add', {todo: "foo", done: true})
+    store.commit('Todos/add', {todo: "bar", done: false})
+  })
 
-    wrapper = shallow(TodoList, {
-      propsData: { store: store }
-    })
-
-    const defaultData = wrapper.vm.store
-    todos = defaultData.state.todos
+  it('removes todo', () => {
+    expect(todos.length).toBe(2)
+    const index = 0
+    wrapper.vm.remove(index)
+    expect(todos.length).toBe(1)
   })
 
   it('toggles todo', () => {
-    expect(wrapper.emitted().toggle).toBeFalsy()
-
     const index = 0
-    wrapper.vm.toggleTodo(index)
 
-    const event = wrapper.emitted().toggle
-    expect(event).toBeTruthy()
-    expect(event.length).toBe(1)
-    expect(event[0]).toEqual([index])
-  })
-
-  it('deletes todo', () => {
-    expect(wrapper.emitted().delete).toBeFalsy()
-
-    const index = 0
-    wrapper.vm.deleteTodo(index)
-
-    const event = wrapper.emitted().delete
-    expect(event).toBeTruthy()
-    expect(event.length).toBe(1)
-    expect(event[0]).toEqual([index])
+    expect(todos[index].done).toBeTruthy()
+    wrapper.vm.toggle(index)
+    expect(todos[index].done).toBeFalsy()
   })
 })

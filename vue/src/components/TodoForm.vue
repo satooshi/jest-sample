@@ -1,6 +1,6 @@
 <template>
     <form novalidate @submit.prevent="submit" class="container" :class="classObjectForm">
-      <todo-input @input="onInputTodo" :store="this.store"></todo-input>
+      <todo-input></todo-input>
     </form>
 </template>
 
@@ -9,9 +9,6 @@
 
   export default {
     name: 'TodoForm',
-    props: {
-      store: Object
-    },
     data () {
       return {
         classObjectForm: {
@@ -25,25 +22,17 @@
     methods: {
       isValid() {
         this.classObjectForm['was-validated'] = true
-        return !!this.store.state.todoInput.todo
-      },
-      clear() {
-        this.store.state.todoInput.todo = ''
-        this.classObjectForm['was-validated'] = false
+        return this.$store.getters['TodoInput/isValid']
       },
       submit() {
         if (this.isValid()) {
-          const newTodo = {
-            todo: this.store.state.todoInput.todo,
-            done: false
-          }
-          this.clear()
-          this.$emit('submit', newTodo)
+          this.$store.dispatch('Todos/add')
+          this._clear()
         }
       },
-      onInputTodo(newValue) {
-        this.store.state.todoInput.todo = newValue
-      }
+      _clear() {
+        this.classObjectForm['was-validated'] = false
+      },
     }
   }
 </script>

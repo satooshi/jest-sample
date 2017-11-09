@@ -10,16 +10,20 @@
 <script>
   export default {
     name: 'TodoInput',
-    props: {
-      store: Object
+    methods: {
+      validate(newValue) {
+        return !!newValue
+      }
     },
     computed: {
       inputText: {
         get() {
-          return this.store.state.todoInput.todo
+          return this.$store.state.TodoInput.todo
         },
         set(newValue) {
-          this.$emit('input', newValue)
+          if (this.validate(newValue)) {
+            this.$store.commit('TodoInput/set', newValue)
+          }
         }
       }
     }
