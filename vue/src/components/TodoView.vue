@@ -1,7 +1,7 @@
 <template>
   <div>
     <todo-form :todo="todo" @add="onAddTodo"></todo-form>
-    <todo-list></todo-list>
+    <todo-list :type="type"></todo-list>
   </div>
 </template>
 
@@ -15,6 +15,10 @@
     components: {
       TodoForm,
       TodoList
+    },
+    props: {
+      type: String,
+      default: 'all',
     },
     data() {
       return {

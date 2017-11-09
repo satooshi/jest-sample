@@ -10,6 +10,22 @@ describe('Todos', () => {
     expect(store.state.Todos.length).toBe(2)
   })
 
+  // getters
+
+  it('filters done todos', () => {
+    const todos = store.getters['Todos/doneTodos']
+    expect(todos.length).toBe(1)
+    expect(todos[0].todo).toBe('foo')
+    expect(todos[0].done).toBeTruthy()
+  })
+
+  it('filters undone todos', () => {
+    const todos = store.getters['Todos/undoneTodos']
+    expect(todos.length).toBe(1)
+    expect(todos[0].todo).toBe('bar')
+    expect(todos[0].done).toBeFalsy()
+  })
+
   // actions
 
   it('add todo', () => {

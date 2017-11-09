@@ -9,6 +9,17 @@ const Todos = {
     {todo: "foo", done: true, edit: false},
     {todo: "bar", done: false, edit: false}
   ],
+  getters: {
+    count(state) {
+      return state.length
+    },
+    doneTodos(state) {
+      return state.filter(todo => todo.done)
+    },
+    undoneTodos(state) {
+      return state.filter(todo => !todo.done)
+    }
+  },
   actions: {
     add({commit}, payload) {
       commit('add', payload)

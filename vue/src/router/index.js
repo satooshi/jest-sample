@@ -9,7 +9,18 @@ export default new Router({
   routes: [
     {
       path: '/',
-      component: TodoView
-    }
+      component: TodoView,
+      props: {type: 'all'}
+    },
+    {
+      path: '/done',
+      component: TodoView,
+      props: {type: 'done'}
+    },
+    {
+      path: '/undone',
+      component: TodoView,
+      props: {type: 'undone'}
+    },
   ]
 })
