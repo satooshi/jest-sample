@@ -1,7 +1,8 @@
 FROM ruby:2.4.2
 
-ENV APP_ROOT /app
-ENV BUNDLE_PATH /bundle
+ENV APP_ROOT=/app
+ENV BUNDLE_JOBS=4
+#ENV BUNDLE_PATH=/bundle
 
 RUN mkdir $APP_ROOT
 WORKDIR $APP_ROOT
@@ -17,11 +18,13 @@ RUN apt-get update \
 COPY Gemfile $APP_ROOT
 COPY Gemfile.lock $APP_ROOT
 
-RUN echo 'gem: --no-document' >> ~/.gemrc && \
+RUN echo 'install: --no-document' >> ~/.gemrc && \
+    echo 'update: --no-document' >> ~/.gemrc && \
     cp ~/.gemrc /etc/gemrc && \
     chmod uog+r /etc/gemrc && \
     bundle config --global build.nokogiri --use-system-libraries && \
     bundle config --global jobs 4 && \
+    gem install bundler && \
     bundle install && \
     rm -rf ~/.gem
 
