@@ -17,11 +17,11 @@
     <div v-for="(todoItem, index) in listTodos" class="list-group-item list-group-item-action flex-column align-items-start">
       <div class="d-flex w-100 justify-content-between">
         <h6 class="mb-1" v-if="!todoItem.edit">
-          <input type="checkbox" @click="toggle(index)" v-model="todoItem.done">
-          <span @dblclick="editTodo(index)">{{todoItem.todo}}</span>
+          <input type="checkbox" @click="toggle(todoItem)" v-model="todoItem.done">
+          <span @dblclick="editTodo(todoItem)">{{todoItem.todo}}</span>
         </h6>
         <div v-if="!todoItem.edit">
-          <a href="#" class="text-danger" @click.prevent="remove(index)">x</a>
+          <a href="#" class="text-danger" @click.prevent="remove(todoItem.id)">x</a>
         </div>
         <todo-form :todo="todoItem" :edit="true" :index="index" v-if="todoItem.edit"></todo-form>
       </div>
@@ -77,8 +77,8 @@
         change: 'Todos/change',
         clear: 'Todos/clear',
       }),
-      editTodo(index) {
-        this.$store.commit('Todos/change', {index: index, props: {edit: true}})
+      editTodo(todo) {
+        this.$store.commit('Todos/change', {id: todo.id, edit: true})
       }
     }
   }

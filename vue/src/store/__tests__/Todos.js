@@ -5,8 +5,8 @@ describe('Todos', () => {
     store.commit('Todos/clear')
     expect(store.state.Todos.todos.length).toBe(0)
 
-    store.commit('Todos/add', {todo: "foo", done: true})
-    store.commit('Todos/add', {todo: "bar", done: false})
+    store.commit('Todos/add', {id: 1, todo: "foo", done: true})
+    store.commit('Todos/add', {id: 2, todo: "bar", done: false})
     expect(store.state.Todos.todos.length).toBe(2)
   })
 
@@ -36,8 +36,9 @@ describe('Todos', () => {
 
   it('toggles todo', () => {
     const index = 0
+    const todo = store.state.Todos.todos[index]
     expect(store.state.Todos.todos[index].done).toBeTruthy()
-    store.dispatch('Todos/toggle', index)
+    store.dispatch('Todos/toggle', todo)
     expect(store.state.Todos.todos[index].done).toBeFalsy()
   })
 
@@ -45,19 +46,21 @@ describe('Todos', () => {
     expect(store.state.Todos.todos[0].done).toBeTruthy()
     expect(store.state.Todos.todos[1].done).toBeFalsy()
 
-    store.dispatch('Todos/toggle', 100)
+    const todo = {id: 100, todo: 'fake', done: false}
+    store.dispatch('Todos/toggle', todo)
 
     expect(store.state.Todos.todos[0].done).toBeTruthy()
     expect(store.state.Todos.todos[1].done).toBeFalsy()
   })
 
   it('removes todo', () => {
-    store.dispatch('Todos/remove', 0)
+    store.dispatch('Todos/remove', 1)
     expect(store.state.Todos.todos.length).toBe(1)
   })
 
   it('does not remove non existing todo', () => {
-    store.dispatch('Todos/remove', 100)
+    const todo = {id: 100, todo: 'fake', done: false}
+    store.dispatch('Todos/remove', todo)
     expect(store.state.Todos.todos.length).toBe(2)
   })
 

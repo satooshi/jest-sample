@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
+import _ from 'underscore'
 
 Vue.use(Vuex)
 
@@ -36,23 +37,54 @@ const Todos = {
           commit('fetch', response.data)
         })
         .catch((error) => {
-          console.log(error)
+          //console.log(error)
         })
     },
     add({commit}, payload) {
-      commit('add', payload)
+      axios.post('/todos', {todo: payload})
+        .then((response) => {
+          commit('add', response.data)
+        })
+        .catch((error) => {
+          // console.log(error)
+        })
     },
-    toggle({commit}, index) {
-      commit('toggle', index)
+    toggle({commit}, todo) {
+      axios.patch('/todos/' + todo.id, {done: !todo.done})
+        .then((response) => {
+          commit('change', response.data)
+        })
+        .catch((error) => {
+          // console.log(error)
+        })
+
     },
-    remove({commit}, index) {
-      commit('remove', index)
+    remove({commit}, id) {
+      axios.delete('/todos/' + id)
+        .then((response) => {
+          commit('remove', id)
+        })
+        .catch((error) => {
+          // console.log(error)
+        })
     },
-    change({commit}, payload){
-      commit('change', payload)
+    change({commit}, todo){
+      axios.patch('/todos/' + todo.id, {todo: todo})
+        .then((response) => {
+          commit('change', response.data)
+        })
+        .catch((error) => {
+          // console.log(error)
+        })
     },
     clear({commit}) {
-      commit('clear')
+      axios.delete('/todos')
+        .then((response) => {
+          commit('clear')
+        })
+        .catch((error) => {
+          // console.log(error)
+        })
     }
   },
   mutations: {
@@ -62,25 +94,19 @@ const Todos = {
     add(state, newTodo) {
       state.todos.push(newTodo)
     },
-    toggle(state, index) {
-      if (state.todos[index]) {
-        const todoItem = state.todos[index]
-        todoItem.done = !todoItem.done
-      }
-    },
-    remove(state, index) {
-      if (state.todos[index]) {
+    remove(state, id) {
+      const index = _.findIndex(state.todos, todo => todo.id === id)
+
+      if (index >= 0) {
         state.todos.splice(index, 1)
       }
     },
     change(state, payload) {
-      const index = payload.index
-      const props = payload.props
-
-      if (state.todos[index]) {
+      const index = _.findIndex(state.todos, todo => todo.id = payload.id)
+      if (index >= 0) {
         const todo = state.todos[index]
-        for (let name in props) {
-          todo[name] = props[name]
+        for (let name in payload) {
+          Vue.set(todo, name, payload[name])
         }
       }
     },

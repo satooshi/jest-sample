@@ -52,7 +52,7 @@
           this.todo.edit = false
 
           if (this.edit) {
-            this.$store.dispatch('Todos/change', {index: this.index, props: this.todo})
+            this.$store.dispatch('Todos/change', this.todo)
           } else {
             this.$store.dispatch('Todos/add', this.todo)
             this.$emit('add')
