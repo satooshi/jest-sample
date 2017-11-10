@@ -1,26 +1,44 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import axios from 'axios'
 
 Vue.use(Vuex)
 
+axios.defaults.baseURL = 'http://localhost:3000'
+axios.defaults.headers = {
+  'Access-Control-Allow-Origin': '*',
+  // 'Cache-Control': 'no-cache',
+}
+
 const Todos = {
   namespaced: true,
-  state: [
-    {todo: "foo", done: true, edit: false},
-    {todo: "bar", done: false, edit: false}
-  ],
+  state: {
+    todos: [
+      // {todo: "foo", done: true, edit: false},
+      // {todo: "bar", done: false, edit: false}
+    ],
+  },
   getters: {
     count(state) {
-      return state.length
+      return state.todos.length
     },
     doneTodos(state) {
-      return state.filter(todo => todo.done)
+      return state.todos.filter(todo => todo.done)
     },
     undoneTodos(state) {
-      return state.filter(todo => !todo.done)
+      return state.todos.filter(todo => !todo.done)
     }
   },
   actions: {
+    fetch({commit}) {
+      axios.get('/todos')
+        .then((response) => {
+          commit('fetch', response.data)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
     add({commit}, payload) {
       commit('add', payload)
     },
@@ -38,35 +56,38 @@ const Todos = {
     }
   },
   mutations: {
+    fetch(state, todos) {
+      state.todos = todos
+    },
     add(state, newTodo) {
-      state.push(newTodo)
+      state.todos.push(newTodo)
     },
     toggle(state, index) {
-      if (state[index]) {
-        const todoItem = state[index]
+      if (state.todos[index]) {
+        const todoItem = state.todos[index]
         todoItem.done = !todoItem.done
       }
     },
     remove(state, index) {
-      if (state[index]) {
-        state.splice(index, 1)
+      if (state.todos[index]) {
+        state.todos.splice(index, 1)
       }
     },
     change(state, payload) {
       const index = payload.index
       const props = payload.props
 
-      if (state[index]) {
-        const todo = state[index]
+      if (state.todos[index]) {
+        const todo = state.todos[index]
         for (let name in props) {
           todo[name] = props[name]
         }
       }
     },
     clear(state) {
-      const length = state.length
+      const length = state.todos.length
       for(let i = length - 1; i >= 0; i--) {
-        state.splice(i, 1)
+        state.todos.splice(i, 1)
       }
     }
   }

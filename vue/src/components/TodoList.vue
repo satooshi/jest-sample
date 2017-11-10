@@ -41,6 +41,9 @@
     props: {
       type: String
     },
+    created () {
+      this.$store.dispatch('Todos/fetch')
+    },
     computed: {
       ...mapGetters({
         count: 'Todos/count',
@@ -54,7 +57,7 @@
           case 'undone':
             return this.undoneTodos
           default:
-            return this.$store.state.Todos
+            return this.$store.state.Todos.todos
         }
       },
       btnAll() {

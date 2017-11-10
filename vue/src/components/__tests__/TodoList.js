@@ -4,7 +4,7 @@ import store from '../../store'
 
 describe('TodoList.vue', () => {
   let wrapper
-  let todos = store.state.Todos
+  let todos = store.state.Todos.todos
 
   beforeEach(() => {
     wrapper = shallow(TodoList, {store})
