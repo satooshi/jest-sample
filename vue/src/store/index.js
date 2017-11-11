@@ -102,7 +102,7 @@ const Todos = {
       }
     },
     change(state, payload) {
-      const index = _.findIndex(state.todos, todo => todo.id = payload.id)
+      const index = _.findIndex(state.todos, todo => todo.id === payload.id)
       if (index >= 0) {
         const todo = state.todos[index]
         for (let name in payload) {
