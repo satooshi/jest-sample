@@ -43,6 +43,9 @@
     },
     created () {
       this.$store.dispatch('Todos/fetch')
+        .catch((error) => {
+          console.log(error)
+        })
     },
     computed: {
       ...mapGetters({

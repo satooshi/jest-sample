@@ -53,8 +53,14 @@
 
           if (this.edit) {
             this.$store.dispatch('Todos/change', this.todo)
+              .catch((error) => {
+                 console.log(error)
+              })
           } else {
             this.$store.dispatch('Todos/add', this.todo)
+              .catch((error) => {
+                 console.log(error)
+              })
             this.$emit('add')
           }
 

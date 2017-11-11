@@ -37,7 +37,7 @@ const Todos = {
           commit('fetch', response.data)
         })
         .catch((error) => {
-          //console.log(error)
+          // console.log(error)
         })
     },
     add({commit}, payload) {
@@ -57,7 +57,6 @@ const Todos = {
         .catch((error) => {
           // console.log(error)
         })
-
     },
     remove({commit}, id) {
       axios.delete('/todos/' + id)
