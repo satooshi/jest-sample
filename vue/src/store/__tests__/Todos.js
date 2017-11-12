@@ -1,7 +1,15 @@
 import store from '../index'
+import axios from 'axios'
 
 describe('Todos', () => {
+  let spy
+
   beforeEach(() => {
+    if (spy) {
+      spy.mockReset();
+      spy.mockRestore();
+    }
+
     store.commit('Todos/clear')
     expect(store.state.Todos.todos.length).toBe(0)
 
@@ -28,44 +36,87 @@ describe('Todos', () => {
 
   // actions
 
-  it('add todo', () => {
-    const todo = {todo: 'foo', done: false}
-    store.dispatch('Todos/add', todo)
-    expect(store.state.Todos.todos.length).toBe(3)
-  })
+  it('fetches todos', async () => {
+    const mockData = {data: [{id: 3, todo: 'foo', done: false}]}
+    spy = jest.spyOn(axios, 'get')
+      .mockImplementation(() => Promise.resolve(mockData))
 
-  it('toggles todo', () => {
-    const index = 0
-    const todo = store.state.Todos.todos[index]
-    expect(store.state.Todos.todos[index].done).toBeTruthy()
-    store.dispatch('Todos/toggle', todo)
-    expect(store.state.Todos.todos[index].done).toBeFalsy()
-  })
+    await store.dispatch('Todos/fetch')
 
-  it ('does not toggle non existing todo', () => {
-    expect(store.state.Todos.todos[0].done).toBeTruthy()
-    expect(store.state.Todos.todos[1].done).toBeFalsy()
-
-    const todo = {id: 100, todo: 'fake', done: false}
-    store.dispatch('Todos/toggle', todo)
-
-    expect(store.state.Todos.todos[0].done).toBeTruthy()
-    expect(store.state.Todos.todos[1].done).toBeFalsy()
-  })
-
-  it('removes todo', () => {
-    store.dispatch('Todos/remove', 1)
+    expect(spy).toBeCalledWith('/todos')
     expect(store.state.Todos.todos.length).toBe(1)
   })
 
-  it('does not remove non existing todo', () => {
+  it('adds todo', async () => {
+    const mockData = {todo: {id: 3, todo: 'foo', done: false}}
+    spy = jest.spyOn(axios, 'post')
+      .mockImplementation(() => Promise.resolve(mockData))
+
+    const todo = {todo: 'foo', done: false}
+    await store.dispatch('Todos/add', todo)
+
+    expect(spy).toBeCalledWith('/todos', {todo: todo})
+    expect(store.state.Todos.todos.length).toBe(3)
+  })
+
+  it('toggles todo', async () => {
+    const index = 0
+    const todo = store.state.Todos.todos[index]
+
+    const mockData = {data: {id: 1, todo: "foo", done: false}}
+    spy = jest.spyOn(axios, 'patch')
+      .mockImplementation(() => Promise.resolve(mockData))
+
+    expect(store.state.Todos.todos[index].done).toBeTruthy()
+    await store.dispatch('Todos/toggle', todo)
+
+    expect(spy).toBeCalledWith('/todos/1', {done: false})
+    expect(store.state.Todos.todos[index].done).toBeFalsy()
+  })
+
+  it ('does not toggle non existing todo', async () => {
+    expect(store.state.Todos.todos[0].done).toBeTruthy()
+    expect(store.state.Todos.todos[1].done).toBeFalsy()
+
+    const mockData = {data: {}}
+    spy = jest.spyOn(axios, 'patch')
+      .mockImplementation(() => Promise.resolve(mockData))
+
     const todo = {id: 100, todo: 'fake', done: false}
-    store.dispatch('Todos/remove', todo)
+    await store.dispatch('Todos/toggle', todo)
+
+    expect(spy).toBeCalledWith('/todos/100', {done: true})
+    expect(store.state.Todos.todos[0].done).toBeTruthy()
+    expect(store.state.Todos.todos[1].done).toBeFalsy()
+  })
+
+  it('removes todo', async () => {
+    spy = jest.spyOn(axios, 'delete')
+      .mockImplementation(() => Promise.resolve({}))
+
+    await store.dispatch('Todos/remove', 1)
+
+    expect(spy).toBeCalledWith('/todos/1')
+    expect(store.state.Todos.todos.length).toBe(1)
+  })
+
+  it('does not remove non existing todo', async () => {
+    spy = jest.spyOn(axios, 'delete')
+      .mockImplementation(() => Promise.resolve({}))
+
+    await store.dispatch('Todos/remove', 100)
+
+    expect(spy).toBeCalledWith('/todos/100')
     expect(store.state.Todos.todos.length).toBe(2)
   })
 
-  it('clears todos', () => {
-    store.dispatch('Todos/clear')
+  it('clears todos', async () => {
+    spy = jest.spyOn(axios, 'delete')
+      .mockImplementation(() => Promise.resolve({}))
+
+    await store.dispatch('Todos/clear')
+
+    expect(spy).toBeCalledWith('/todos')
     expect(store.state.Todos.todos.length).toBe(0)
   })
 })
