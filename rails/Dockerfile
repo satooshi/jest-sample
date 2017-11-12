@@ -31,7 +31,7 @@ RUN echo 'install: --no-document' >> ~/.gemrc && \
 EXPOSE 3000
 #COPY start.sh /$APP_ROOT/start.sh
 
-#COPY . /$APP_ROOT
+COPY . /$APP_ROOT
 #ENTRYPOINT start.sh
 CMD /$APP_ROOT/start.sh
 

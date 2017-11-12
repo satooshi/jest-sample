@@ -5,7 +5,7 @@ import _ from 'underscore'
 
 Vue.use(Vuex)
 
-axios.defaults.baseURL = 'http://localhost:3000'
+axios.defaults.baseURL = process.env.NODE_ENV == 'production' ? '/api' : 'http://localhost:3000/api'
 axios.defaults.headers = {
   'Access-Control-Allow-Origin': '*',
   // 'Cache-Control': 'no-cache',
